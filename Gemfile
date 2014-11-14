@@ -99,7 +99,7 @@ group :development, :test, :performance do
   gem 'pry-stack_explorer'
   gem 'qunit-rails'
   gem 'rspec-collection_matchers'
-  gem 'rspec-instafail'
+  gem 'rspec-instafail', require: false
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
