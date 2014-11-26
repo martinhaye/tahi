@@ -362,6 +362,7 @@ GEM
     qunit-rails (0.0.7)
       railties
     rack (1.5.2)
+    rack-cors (0.2.9)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
@@ -592,6 +593,7 @@ DEPENDENCIES
   puma
   quiet_assets (~> 1.0.3)
   qunit-rails
+  rack-cors
   rack-timeout
   rails (= 4.1.7)
   rails_12factor

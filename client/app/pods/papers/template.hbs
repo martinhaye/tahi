@@ -1,0 +1,22 @@
+<div id="tahi-container">
+  <main {{bind-attr class="hasNoMetaDataTasks:sidebar-empty"}}>
+    <aside>
+      <div class="task-list">
+        {{partial "paper/task-list"}}
+      </div>
+    </aside>
+    <article>
+      <div class="manuscript-container">
+        <h2 id="paper-title">
+          {{title}}
+        </h2>
+
+        <div id="paper-abstract" contenteditable="true" placeholder="Type your abstract here">
+          {{abstract}}
+        </div>
+
+        <div id="paper-body">{{{body}}}</div>
+      </div>
+    </article>
+  </main>
+</div>

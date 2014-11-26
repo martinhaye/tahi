@@ -22,7 +22,7 @@ Tahi::Application.routes.draw do
     mount UploadServer, at: '/fake_s3/'
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", registrations: "registrations" }
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", registrations: "registrations", sessions: "sessions" }
   devise_scope :user do
     get "users/sign_out" => "devise/sessions#destroy"
   end
@@ -137,6 +137,6 @@ Tahi::Application.routes.draw do
   resources :errors, only: :create
   resources :feedback, only: :create
 
-  get '*route' => 'ember#index'
+  # get '*route' => 'ember#index'
   root 'ember#index'
 end

@@ -1,0 +1,73 @@
+.questionnaire {
+  counter-reset: reviewer-form-counter;
+
+  ol > li {
+    position: relative;
+    margin-bottom: 50px;
+    &:before {
+      content: counter(reviewer-form-counter);
+      counter-increment: reviewer-form-counter;
+
+      @include position(absolute, -1px auto auto -28px);
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      padding: 5px;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 14px;
+      text-align: center;
+      background: $tahi-green;
+    }
+  }
+}
+
+.question {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.question-info {
+  font-style: italic;
+}
+
+.question-text {
+  font-size: 1.4em;
+  line-height: 1.2em;
+}
+
+.question-dataset {
+  padding: 30px;
+  margin: 15px 0;
+  background: rgb(194, 232, 188);
+}
+
+.question-dataset-header {
+  @extend .question-text;
+  margin-bottom: 10px;
+}
+
+.sub-question .question-text {
+  font-size: 14px;
+}
+
+.question-help {
+  padding-left: 0;
+  margin: 15px 0;
+  list-style-type: none;
+
+  li:before {
+    content: ">";
+    color: $tahi-green-dark;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-right: 0.1em;
+  }
+}
+
+.yes-no-with-comments {
+  background: rgb(194, 232, 188);
+  padding: 10px;
+  border-radius: 5px;
+}

@@ -6,28 +6,20 @@ class PapersController < ApplicationController
   before_action :sanitize_title, only: [:create, :update]
   before_action :prevent_update_on_locked!, only: [:update, :toggle_editable, :submit, :upload]
 
-  layout 'ember'
-
   respond_to :json
 
-  def show
-    respond_to do |format|
-      format.html do
-        render 'ember/index'
-      end
+  def index
+    respond_with(current_user.assigned_papers, serializer: LitePaperSerializer)
+  end
 
-      format.json do
-        render json: paper
-      end
-    end
+  def show
+    binding.pry
+    request.format = 'json'
+    respond_with(paper)
   end
 
   def create
     respond_with PaperFactory.create(paper_params, current_user)
-  end
-
-  def edit
-    render 'ember/index'
   end
 
   def update
@@ -44,10 +36,6 @@ class PapersController < ApplicationController
   end
 
   # non RESTful routes
-
-  def manage
-    render 'ember/index'
-  end
 
   def upload
     manuscript = paper.manuscript || paper.build_manuscript

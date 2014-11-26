@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd client
+node_modules/ember-cli/bin/ember server --proxy http://localhost:5000

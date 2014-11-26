@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable,
-         authentication_keys: [:login],
+         # authentication_keys: [:login],
          omniauth_providers: [:orcid, :cas]
 
   def self.site_admins

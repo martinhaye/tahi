@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  # protect_from_forgery with: :null_session
 
   before_bugsnag_notify :add_user_info_to_bugsnag
 
@@ -53,5 +53,13 @@ class ApplicationController < ActionController::Base
       email: current_user.email,
       site_admin: current_user.site_admin?
     }
+  end
+
+  #TODO: Short circuit for spike
+  def authenticate_user!
+    User.find_by(email: 'admin@admin.com')
+  end
+  def current_user
+    User.find_by(email: 'admin@admin.com')
   end
 end
