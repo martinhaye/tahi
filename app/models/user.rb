@@ -10,14 +10,14 @@ class User < ActiveRecord::Base
   end
 
   has_many :affiliations, inverse_of: :user
-  has_many :submitted_papers, inverse_of: :user, class_name: 'Paper'
+  has_many :submitted_papers, inverse_of: :creator, class_name: 'Paper'
   has_many :paper_roles, inverse_of: :user
   has_many :user_roles, inverse_of: :user
   has_many :roles, through: :user_roles
   has_many :journals, ->{ uniq }, through: :roles
   has_many :flows, class_name: 'UserFlow', inverse_of: :user, dependent: :destroy
   has_many :comments, inverse_of: :commenter, foreign_key: 'commenter_id'
-  has_many :participations, inverse_of: :participant, foreign_key: 'participant_id'
+  has_many :participations
   has_many :tasks, through: :participations
   has_many :comment_looks, inverse_of: :user
   has_many :credentials, inverse_of: :user, dependent: :destroy
@@ -65,15 +65,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def accessible_paper_ids
-    if site_admin?
-      Paper.all.pluck(:id)
-    else
-      admin_papers = Paper.where(journal: journals.merge(Role.can_view_all_manuscript_managers))
-      assigned_papers.pluck(:id) | admin_papers.pluck(:id)
-    end
-  end
-
   def self.search_users(query: nil, assigned_users_in_journal_id: nil)
     if query
       sanitized_query = connection.quote_string(query.to_s.downcase) + '%'
@@ -86,8 +77,8 @@ class User < ActiveRecord::Base
   private
 
   def add_flows
-    FlowTemplate.templates.values.each do |attrs|
-      flows.create!(attrs)
+    FlowQuery::FLOW_TITLES.each do |title|
+      flows.create!(title: title)
     end
   end
 end

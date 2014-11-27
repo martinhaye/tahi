@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141112193333) do
+ActiveRecord::Schema.define(version: 20141125140553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,9 @@ ActiveRecord::Schema.define(version: 20141112193333) do
     t.text     "pdf_css"
     t.text     "manuscript_css"
     t.text     "description"
+    t.string   "doi_publisher_prefix"
+    t.string   "doi_journal_prefix"
+    t.string   "last_doi_issued"
   end
 
   create_table "manuscript_manager_templates", force: true do |t|
@@ -187,6 +190,7 @@ ActiveRecord::Schema.define(version: 20141112193333) do
     t.datetime "last_heartbeat_at"
     t.integer  "striking_image_id"
     t.boolean  "editable",          default: true
+    t.text     "doi"
   end
 
   add_index "papers", ["journal_id"], name: "index_papers_on_journal_id", using: :btree
@@ -196,11 +200,11 @@ ActiveRecord::Schema.define(version: 20141112193333) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "task_id"
-    t.integer  "participant_id"
+    t.integer  "user_id"
   end
 
-  add_index "participations", ["participant_id"], name: "index_participations_on_participant_id", using: :btree
   add_index "participations", ["task_id"], name: "index_participations_on_task_id", using: :btree
+  add_index "participations", ["user_id"], name: "index_participations_on_user_id", using: :btree
 
   create_table "phase_templates", force: true do |t|
     t.string   "name"
@@ -259,10 +263,10 @@ ActiveRecord::Schema.define(version: 20141112193333) do
 
   create_table "role_flows", force: true do |t|
     t.string  "title"
-    t.string  "empty_text"
     t.integer "role_id"
     t.integer "position"
   end
+
   create_table "roles", force: true do |t|
     t.string   "name"
     t.integer  "journal_id"
@@ -339,7 +343,6 @@ ActiveRecord::Schema.define(version: 20141112193333) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title"
-    t.string   "empty_text"
     t.integer  "user_id"
   end
 

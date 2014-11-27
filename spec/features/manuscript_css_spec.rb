@@ -3,8 +3,8 @@ require 'spec_helper'
 feature "Manuscript CSS", js: true do
   let(:author) { FactoryGirl.create :user }
   let(:journal) { FactoryGirl.create :journal, manuscript_css: "background: magenta;" }
-  let(:paper) { FactoryGirl.create :paper, :with_tasks, journal: journal, submitted: false, short_title: 'foo bar', user: author }
-  let(:submitted_paper) { FactoryGirl.create :paper, :with_tasks, journal: journal, submitted: true, short_title: 'submitted foo bar', user: author }
+  let(:paper) { FactoryGirl.create :paper, :with_tasks, journal: journal, submitted: false, short_title: 'foo bar', creator: author }
+  let(:submitted_paper) { FactoryGirl.create :paper, :with_tasks, journal: journal, submitted: true, short_title: 'submitted foo bar', creator: author }
 
   before do
     submitted_paper.tasks.metadata.update_all completed: true
@@ -19,7 +19,7 @@ feature "Manuscript CSS", js: true do
 
   context "when the paper is submitted" do
     scenario "CSS is applied when viewing a paper" do
-      paper_page = PaperPage.visit submitted_paper
+      paper_page = EditPaperPage.visit submitted_paper
       expect(paper_page.css).to match /magenta/
     end
   end

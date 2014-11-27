@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "2.1.4"
+ruby "2.1.5"
 
 # Task Engines
 gem 'plos_authors',           path: 'engines/plos_authors'
@@ -49,7 +49,6 @@ gem 'rubyzip', require: 'zip'
 gem 'sass-rails', '~> 4.0.4'
 gem 'sidekiq'
 gem 'sinatra'
-gem 'spring'
 gem 'sunspot_rails'
 gem 'tahi_epub', github: 'tahi-project/tahi_epub'
 gem 'timeliness'
@@ -75,6 +74,7 @@ group :development do
   # gem 'rack-mini-profiler' # NOTE: this clashes with Teaspoon specs.
   # Please add it in temporarily if you need to check for speed
   gem 'bullet'
+  gem 'haml-lint', require: false
   gem 'kss-rails'
   gem 'letter_opener'
   gem 'overcommit', require: false

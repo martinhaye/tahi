@@ -2,8 +2,7 @@ class PapersPolicy < ApplicationPolicy
   primary_resource :paper
 
   def connected_users
-    #TODO: consolidate all of these into paper roles, to make this a very efficient query (see pivotal #81129650)
-    [paper.user, paper.assigned_users, paper.tasks.flat_map(&:participants)].flatten
+    paper.assigned_users
   end
 
   def show?
@@ -15,7 +14,7 @@ class PapersPolicy < ApplicationPolicy
   end
 
   def update?
-    can_manage_paper?
+    can_view_paper?
   end
 
   def upload?
@@ -26,8 +25,12 @@ class PapersPolicy < ApplicationPolicy
     can_view_paper?
   end
 
+  def manage?
+    current_user.site_admin? || can_view_manuscript_manager?
+  end
+
   def download?
-    can_manage_paper?
+    can_view_paper?
   end
 
   def heartbeat?
@@ -39,17 +42,13 @@ class PapersPolicy < ApplicationPolicy
   end
 
   def submit?
-    can_manage_paper?
+    can_view_paper?
   end
 
   private
 
-  def can_manage_paper?
-    current_user.site_admin? || author? || paper_collaborator? || paper_admin? || paper_editor? || paper_reviewer?
-  end
-
   def can_view_paper?
-    can_manage_paper? || can_view_manuscript_manager?
+    current_user.site_admin? || connected_users.exists?(current_user) || can_view_manuscript_manager?
   end
 
   PaperRole::ALL_ROLES.each do |role|

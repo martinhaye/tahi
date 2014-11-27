@@ -17,6 +17,7 @@ ETahi.Paper = DS.Model.extend
   lockedBy: DS.belongsTo('user')
 
   body: a('string')
+  doi: a('string')
   shortTitle: a('string')
   submitted: a('boolean')
   status: a('string')
@@ -37,3 +38,8 @@ ETahi.Paper = DS.Model.extend
   ).property('tasks.content.@each.isMetadataTask')
 
   allMetadataTasksCompleted: ETahi.computed.all('allMetadataTasks', 'completed', true)
+
+  unloadRecord: ->
+    litePaper = @store.getById('litePaper', @get('id'))
+    @store.unloadRecord(litePaper) if litePaper
+    @_super()

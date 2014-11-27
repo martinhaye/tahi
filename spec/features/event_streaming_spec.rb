@@ -3,8 +3,8 @@ require 'spec_helper'
 feature "Event streaming", js: true, selenium: true do
   let!(:author) { FactoryGirl.create :user, :site_admin }
   let!(:journal) { FactoryGirl.create :journal }
-  let!(:paper) { FactoryGirl.create :paper, :with_tasks, user: author, journal: journal }
-  let(:upload_task) { paper.tasks_for_type(UploadManuscript::Task).first }
+  let!(:paper) { FactoryGirl.create :paper, :with_tasks, creator: author, journal: journal }
+  let(:upload_task) { paper.tasks_for_type(UploadManuscript::UploadManuscriptTask).first }
   let(:text_body) { { type: "text", value: "Hi there!" } }
 
   before do
@@ -19,16 +19,6 @@ feature "Event streaming", js: true, selenium: true do
     end
 
     let(:submission_phase) { paper.phases.find_by_name("Submission Data") }
-
-    scenario "creating a new message task" do
-      mt = submission_phase.tasks.new title: "Wicked Message Card", type: "MessageTask", body: text_body, role: "user"
-      mt.save!
-
-      phase = all('.column').detect {|p| p.find('h2').text == "Submission Data" }
-      within phase do
-        expect(page).to have_content "Wicked Message Card"
-      end
-    end
 
     scenario "creating a new task" do
       submission_phase.tasks.create title: "Wicked Awesome Card", type: "Task", body: text_body, role: "admin"
@@ -47,19 +37,6 @@ feature "Event streaming", js: true, selenium: true do
         expect(page).to_not have_content deleted_task.title
       end
     end
-  end
-
-  describe "message tasks" do
-    before do
-      submission_phase = paper.phases.find_by_name("Submission Data")
-      @mt = submission_phase.tasks.new title: "Wicked Message Card", type: "MessageTask", body: text_body, role: "user"
-      @mt.participants << author
-      @mt.save!
-      TaskManagerPage.visit paper
-      find('.card-content', text: "Wicked Message Card").click
-      expect(page).to have_css(".overlay-content")
-    end
-
   end
 
   describe "tasks" do
@@ -91,6 +68,52 @@ feature "Event streaming", js: true, selenium: true do
       CommentLookManager.sync_task(upload_task)
       within '.message-comments' do
         expect(page).to have_css('.message-comment.unread', text: "This is my comment")
+      end
+    end
+  end
+
+  describe "paper roles" do
+
+    let(:another_paper) { FactoryGirl.create(:paper, journal: journal) }
+
+    before do
+      DashboardPage.visit
+      another_paper.paper_roles.collaborators.create(user: author)
+    end
+
+    scenario "adding a collaborator" do
+      expect(page).to have_text(another_paper.title)
+    end
+
+    scenario "removing a collaborator" do
+      another_paper.paper_roles.collaborators.where(user: author).destroy_all
+      expect(page).to_not have_text(another_paper.title)
+    end
+  end
+
+  describe "participations" do
+
+    let(:another_paper) { FactoryGirl.create(:paper, journal: journal) }
+    let(:task) { FactoryGirl.create(:task, paper: another_paper) }
+
+    before do
+      DashboardPage.visit
+      another_paper.paper_roles.participants.create(user: author)
+    end
+
+    context "when not already associated to the paper" do
+
+      scenario "added as a participant" do
+        task.participants << author
+        expect(page).to have_text(another_paper.title)
+      end
+    end
+
+    context "when associated as a participant" do
+
+      scenario "removes last participation" do
+        another_paper.paper_roles.participants.destroy_all
+        expect(page).to_not have_text(another_paper.title)
       end
     end
   end

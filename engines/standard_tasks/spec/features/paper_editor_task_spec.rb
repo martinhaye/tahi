@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Assigns Editor", js: true, solr: true do
   let(:admin) { FactoryGirl.create(:user, site_admin: true) }
   let(:editor) { FactoryGirl.create(:user) }
-  let(:paper) { FactoryGirl.create(:paper, user: admin, submitted: true) }
+  let(:paper) { FactoryGirl.create(:paper, creator: admin, submitted: true) }
   let!(:task) { FactoryGirl.create(:paper_editor_task, paper: paper) }
 
   before do
@@ -13,7 +13,7 @@ feature "Assigns Editor", js: true, solr: true do
     SignInPage.visit.sign_in admin
   end
 
-  scenario "Admin can assign an editor to a paper" do
+  scenario "Admin can assign an editor to a paper", selenium: true do
     dashboard_page = DashboardPage.new
     paper_page = dashboard_page.view_submitted_paper(paper)
     task_manager_page = paper_page.visit_task_manager

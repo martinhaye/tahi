@@ -8,10 +8,7 @@ ETahi.initializer
     logError = (msg) ->
       if window.teaspoonTesting == true
         console.log("ERROR: " + msg)
-      else
-        ETahi.RESTless.post errorPath,
-          message: msg
-
+        
     container.register('logError:main', logError , instantiate: false)
     application.inject('route', 'logError', 'logError:main')
 
@@ -25,7 +22,7 @@ ETahi.initializer
     # The global error handler
     Ember.onerror = (error) ->
       logError("\n" + error.message + "\n" + error.stack + "\n")
-      ErrorNotifier.notify(error.message, error.stack)
+      window.ErrorNotifier.notify(error.message, error.stack)
       if ETahi.environment == 'development'
         throw error
       else
@@ -35,8 +32,8 @@ ETahi.initializer
       {type, url} = ajaxSettings
       {status, statusText} = jqXHR
 
-      # don't blow up in case of a 403 from rails when doing authorization checks.
-      return if jqXHR.getResponseHeader('Tahi-Authorization-Check') == 'true'
+      # don't blow up in case of a 403 from rails
+      return if status == 403
       return if status == 422 # ember data should handle these errors.
 
       #don't blow up if blowing up blows up

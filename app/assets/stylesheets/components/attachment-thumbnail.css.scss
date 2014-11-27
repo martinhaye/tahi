@@ -61,7 +61,7 @@
   margin: 3px 0 1em 0;
   font-size: 21px;
   outline: none;
-  display: inline-block;
+  word-wrap: break-word;
 }
 
 .attachment-thumbnail-caption {
@@ -212,7 +212,6 @@
 }
 
 .attachment-thumbnail-image-placeholder {
-  min-width: 400px;
   min-height: 200px;
   text-align: center;
   background: #f6f6f6;

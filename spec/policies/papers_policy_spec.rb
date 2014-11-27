@@ -12,7 +12,7 @@ describe PapersPolicy do
   end
 
   context "authors" do
-    let(:paper) { FactoryGirl.create(:paper, user: user) }
+    let(:paper) { FactoryGirl.create(:paper, creator: user) }
 
     include_examples "author for paper"
   end
@@ -36,6 +36,14 @@ describe PapersPolicy do
   context "paper reviewers" do
     before do
       create(:paper_role, :reviewer, user: user, paper: paper)
+    end
+
+    include_examples "author for paper"
+  end
+
+  context "paper participant" do
+    before do
+      create(:paper_role, :participant, user: user, paper: paper)
     end
 
     include_examples "author for paper"
@@ -78,8 +86,9 @@ describe PapersPolicy do
 
     it { expect(policy.show?).to be(true) }
     it { expect(policy.upload?).to be(true) }
+    it { expect(policy.manage?).to be(true) }
     it { expect(policy.toggle_editable?).to be(true) }
-    it { expect(policy.submit?).to be(false) }
+    it { expect(policy.submit?).to be(true) }
   end
 
   context "admin on different journal" do

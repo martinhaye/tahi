@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Manuscript Manager", js: true, selenium: true, solr: true do
   let(:admin) { create :user, :site_admin }
   let!(:journal) { FactoryGirl.create :journal }
-  let!(:paper) { FactoryGirl.create :paper, :with_tasks, user: admin, submitted: true, journal: journal }
+  let!(:paper) { FactoryGirl.create :paper, :with_tasks, creator: admin, submitted: true, journal: journal }
 
   before do
     assign_journal_role(journal, admin, :admin)
@@ -96,8 +96,6 @@ feature "Manuscript Manager", js: true, selenium: true, solr: true do
       expect(overlay).to be_completed
       expect(overlay).to have_admin(admin.full_name)
     end
-
-    expect(task_manager_page).to have_no_application_error
 
     needs_editor_phase = TaskManagerPage.new.phase 'Assign Editor'
     needs_editor_phase.view_card 'Assign Editor' do |overlay|

@@ -21,10 +21,11 @@ module TahiHelperMethods
     role = journal.roles.where(kind: type).first
     role ||= FactoryGirl.create(:role, type, journal: journal)
     UserRole.create!(user: user, role: role)
+    role
   end
 
   def with_aws_cassette(name)
-    VCR.use_cassette(name, :match_requests_on => [:method, VCR.request_matchers.uri_without_params(:AWSAccessKeyId, :Expires, :Signature)]) do
+    VCR.use_cassette(name, match_requests_on: [:method, VCR.request_matchers.uri_without_params(:AWSAccessKeyId, :Expires, :Signature)], record: :new_episodes) do
       yield
     end
   end

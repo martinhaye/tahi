@@ -24,7 +24,7 @@ ETahi.BasePaperController = Ember.ObjectController.extend
 
   assignedTasks: (->
     assignedTasks = @get('tasks').filter (task) =>
-      task.get('participations').mapBy('participant').contains(@getCurrentUser())
+      task.get('participations').mapBy('user').contains(@getCurrentUser())
 
     authorTasks   = @get('authorTasks')
     assignedTasks.filter (t)-> !authorTasks.contains(t)
@@ -38,3 +38,7 @@ ETahi.BasePaperController = Ember.ObjectController.extend
   hasNoMetaDataTasks: (->
     Em.isEmpty(@get('assignedTasks')) && Em.isEmpty(@get('editorTasks')) && Em.isEmpty(@get('authorTasks'))
   ).property('assignedTasks.@each', 'editorTasks.@each', 'authorTasks.@each')
+
+  actions:
+    export: (downloadType) ->
+      ETahi.DocumentDownloadService.initiate(@get('id'), downloadType.format)
