@@ -13,9 +13,7 @@ class PapersController < ApplicationController
   end
 
   def show
-    binding.pry
-    request.format = 'json'
-    respond_with(paper)
+    render json: paper
   end
 
   def create

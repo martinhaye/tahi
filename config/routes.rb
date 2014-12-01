@@ -42,6 +42,7 @@ Tahi::Application.routes.draw do
   get '/user_flows/authorization' => 'user_flows#authorization'
   resources :user_flows
 
+  resources :foos, only: [:index]
   resources :role_flows, only: [:show, :create, :update, :destroy]
 
   resources :authors, only: [:create, :update, :destroy]
