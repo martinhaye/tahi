@@ -1,0 +1,66 @@
+#ember-app //for select2 specifity issues
+.user-role-selector {
+  .select2-choices {
+    border: none;
+    background-image: none;
+    overflow: visible;
+    padding-right: 0;
+
+    .select2-search-choice {
+      @extend .token;
+      @extend .token--with-remove;
+
+      .select2-search-choice-close {
+        @extend .token-remove;
+        color: $tahi-blue;
+        font-size: 14px;
+        background-image: none !important;
+        background: transparent;
+      }
+
+      &:hover .select2-search-choice-close {
+        display: block;
+      }
+    }
+  }
+}
+
+.add-participant-button {
+  border: 1px solid $tahi-green;
+  color: $tahi-green;
+  background: $tahi-white;
+  @include size(25px, 25px);
+  line-height: 20px;
+
+  &:hover {
+    border: 1px solid #137300;
+    background: rgba($tahi-green, 0.5);
+    color: #137300;
+  }
+}
+
+.participant-dropdown.select2-drop-multi.select2-drop-active {
+  &.select2-drop-above {
+    border: 1px solid #ccc;
+    margin-top: -4px;
+  }
+
+  border: 1px solid #ccc;
+  box-shadow: none;
+
+  .select2-highlighted {
+    background: $tahi-green;
+
+    .suggestion-sub-value { color: rgba(255,255,255, 0.7); }
+  }
+
+  .suggestion-sub-value {
+    margin-bottom: 3px;
+    color: #666;
+    font-size: 90%;
+  }
+
+  .select2-no-results, .select2-searching {
+    background: $tahi-white;
+  }
+}
