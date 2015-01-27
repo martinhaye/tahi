@@ -1,4 +1,4 @@
-FROM phusion/passenger-customizable
+FROM phusion/passenger-customizable:0.9.14
 
 MAINTAINER Tahi Project Team <tahiprojectteam@plos.org>
 # VERSION 0.0.1
